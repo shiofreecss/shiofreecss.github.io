@@ -1,7 +1,7 @@
 // Add pixel stars to the background
 function createPixelStars() {
     const body = document.querySelector('body');
-    const numberOfStars = 150;
+    const numberOfStars = 200;
     
     for (let i = 0; i < numberOfStars; i++) {
         const star = document.createElement('div');
@@ -20,12 +20,17 @@ function createPixelStars() {
         // Random twinkle animation delay
         const animationDelay = Math.random() * 5 + 's';
         
+        // Random color (cyan or pink to match our theme)
+        const colorChoice = Math.random() > 0.5 ? '#00f0ff' : '#ff00a5';
+        
         // Apply styles
         star.style.left = `${x}px`;
         star.style.top = `${y}px`;
         star.style.width = `${size}px`;
         star.style.height = `${size}px`;
         star.style.opacity = opacity;
+        star.style.backgroundColor = colorChoice;
+        star.style.boxShadow = `0 0 8px ${colorChoice}`;
         star.style.animation = `twinkle 5s infinite ${animationDelay}`;
         
         body.appendChild(star);
@@ -38,7 +43,7 @@ function addTwinkleAnimation() {
     stylesheet.textContent = `
         @keyframes twinkle {
             0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+            50% { opacity: 1; box-shadow: 0 0 15px currentColor; }
         }
     `;
     document.head.appendChild(stylesheet);
@@ -58,14 +63,14 @@ function pixelateHeadings() {
         
         // Add textShadow to make it look more pixelated
         title.style.textShadow = `
-            2px 0 0 rgba(85, 199, 255, 0.3),
-            -2px 0 0 rgba(85, 199, 255, 0.3),
-            0 2px 0 rgba(85, 199, 255, 0.3),
-            0 -2px 0 rgba(85, 199, 255, 0.3),
-            1px 1px 0 rgba(85, 199, 255, 0.3),
-            -1px -1px 0 rgba(85, 199, 255, 0.3),
-            1px -1px 0 rgba(85, 199, 255, 0.3),
-            -1px 1px 0 rgba(85, 199, 255, 0.3)
+            2px 0 0 rgba(255, 0, 165, 0.3),
+            -2px 0 0 rgba(255, 0, 165, 0.3),
+            0 2px 0 rgba(255, 0, 165, 0.3),
+            0 -2px 0 rgba(255, 0, 165, 0.3),
+            1px 1px 0 rgba(255, 0, 165, 0.3),
+            -1px -1px 0 rgba(255, 0, 165, 0.3),
+            1px -1px 0 rgba(255, 0, 165, 0.3),
+            -1px 1px 0 rgba(255, 0, 165, 0.3)
         `;
         
         // Add pixel effect to the ::after element
@@ -85,11 +90,70 @@ function pixelateHeadings() {
     });
 }
 
+// Add pixel hover effects to buttons and links
+function addPixelHoverEffects() {
+    // Add pixel hover effect to nav links
+    const navLinks = document.querySelectorAll('.nav-links a');
+    navLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+            link.style.textShadow = '0 0 8px #00f0ff, 0 0 15px #00f0ff';
+            link.style.transform = 'translateY(-2px)';
+            link.style.transition = 'all 0.2s ease';
+        });
+        
+        link.addEventListener('mouseleave', () => {
+            link.style.textShadow = '';
+            link.style.transform = '';
+        });
+    });
+    
+    // Add pixel hover effect to about list items
+    const aboutItems = document.querySelectorAll('.about-list li');
+    aboutItems.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            item.style.borderColor = '#00f0ff';
+            item.style.boxShadow = '0 0 15px rgba(0, 240, 255, 0.5)';
+            item.style.transform = 'translateX(5px)';
+            item.style.transition = 'all 0.3s ease';
+        });
+        
+        item.addEventListener('mouseleave', () => {
+            item.style.borderColor = '';
+            item.style.boxShadow = '';
+            item.style.transform = '';
+        });
+    });
+    
+    // Add pixel hover effect to social icons
+    const socialIcons = document.querySelectorAll('.social-icon');
+    socialIcons.forEach(icon => {
+        icon.addEventListener('mouseenter', () => {
+            icon.style.transform = 'translateY(-5px) scale(1.1)';
+            icon.style.textShadow = '0 0 15px #00f0ff, 0 0 25px #00f0ff';
+        });
+        
+        icon.addEventListener('mouseleave', () => {
+            icon.style.transform = '';
+            icon.style.textShadow = '';
+        });
+    });
+}
+
 // Initialize pixel art
 function initPixelArt() {
     addTwinkleAnimation();
     createPixelStars();
     pixelateHeadings();
+    addPixelHoverEffects();
+    
+    // Add pixel font if not already loaded
+    if (!document.getElementById('pixel-font')) {
+        const fontLink = document.createElement('link');
+        fontLink.id = 'pixel-font';
+        fontLink.rel = 'stylesheet';
+        fontLink.href = 'https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap';
+        document.head.appendChild(fontLink);
+    }
     
     // Reposition stars on window resize
     window.addEventListener('resize', () => {
