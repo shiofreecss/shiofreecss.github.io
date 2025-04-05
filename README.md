@@ -1,19 +1,21 @@
-# ShioFreeCSS Portfolio Website
+# ShioDev Portfolio Website
 
-This repository contains the source code for my personal portfolio website hosted on GitHub Pages. The site showcases all the applications I've built.
+This repository contains the source code for my personal portfolio website hosted on GitHub Pages. The site showcases my professional background, technical skills, and development activities.
 
 ## Technologies Used
 
 - HTML5
 - CSS3 (with CSS variables and modern layout techniques)
 - JavaScript (ES6+)
-- Font Awesome for icons
+- Font Awesome and Devicon for icons
+- GitHub Stats API integration
 
 ## Features
 
 - Responsive design that works on all devices
 - Modern UI with smooth animations
-- Project showcase with links to live demos and source code
+- Comprehensive display of skills and expertise
+- GitHub activity tracking and statistics
 - Contact information and social links
 
 ## How to View
@@ -36,13 +38,13 @@ To run this website locally:
 
 3. Open `index.html` in your browser.
 
-## Customization
+## Sections
 
-To customize this portfolio for your own use:
-
-1. Update the content in `index.html` with your own information
-2. Modify the styling in `css/styles.css` as needed
-3. Add your own projects to the projects section
+- **About Me**: Professional background and personal interests
+- **Tech Stack & Expertise**: Overview of technical capabilities
+- **Skills**: Detailed breakdown of programming languages and tools
+- **Activity**: GitHub statistics and contribution graphs
+- **Contact**: Social media links and professional connections
 
 ## License
 

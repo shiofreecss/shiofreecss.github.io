@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShioFreeCSS Portfolio</title>
+    <title>ShioDev Portfolio</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 </head>
 <body>
     <nav class="navbar">
         <div class="container">
-            <div class="logo">ShioFreeCSS</div>
+            <div class="logo">ShioDev</div>
             <ul class="nav-links">
                 <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
+                <li><a href="#expertise">Expertise</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#activity">Activity</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <div class="menu-toggle">
@@ -24,48 +27,127 @@
 
     <header>
         <div class="container">
-            <h1>ShioFreeCSS</h1>
-            <p>Developer Portfolio</p>
+            <h1>Hello 🌎, I'm Shio</h1>
+            <div class="intro-quote">
+                <blockquote>
+                    With over 8 years of experience as a Fullstack Engineer & 2 years working as a Project Manager. I'm on a mission to create technology solutions that connect the digital world with real life! I develop frontend and backend solutions for both revolutionary startups and enterprise projects. I'm passionate about clean code and user-centered design, thriving in innovative environments focused on continuous growth.
+                </blockquote>
+            </div>
         </div>
     </header>
 
     <section id="about" class="section">
         <div class="container">
-            <h2>About Me</h2>
-            <p>Hi! I'm a developer passionate about creating useful applications. Here you'll find information about all the applications I've built.</p>
+            <h2>✨ About Me</h2>
+            <ul class="about-list">
+                <li><span class="highlight">🧠 Professional Focus:</span> Fullstack Engineer (8+ years) & Project Manager (2+ years)</li>
+                <li><span class="highlight">🚀 Specialization:</span> MVP Builder & App Developer in AI & Blockchain for Financial Environments</li>
+                <li><span class="highlight">📚 Currently Learning:</span> Scrum & Scaled Agile to improve workflow & scalability</li>
+                <li><span class="highlight">💬 Ask Me About:</span> Building scalable APIs, AI integrations, blockchain protocols, and financial applications</li>
+                <li><span class="highlight">🎮 Fun Facts:</span> I love anime, Go (board game) & ping pong</li>
+            </ul>
         </div>
     </section>
 
-    <section id="projects" class="section">
+    <section id="expertise" class="section">
         <div class="container">
-            <h2>My Applications</h2>
-            <div class="projects-grid">
-                <!-- Project cards will go here -->
-                <div class="project-card">
-                    <h3>Project 1</h3>
-                    <p>Description of project 1 and its features.</p>
-                    <div class="project-links">
-                        <a href="#" class="btn"><i class="fas fa-link"></i> Live Demo</a>
-                        <a href="#" class="btn"><i class="fab fa-github"></i> Source Code</a>
+            <h2>🛠️ Tech Stack & Expertise</h2>
+            <div class="expertise-table">
+                <div class="expertise-row">
+                    <div class="expertise-category">💻 Backend & Cloud</div>
+                    <div class="expertise-tech">Python, Go, Node.js, FastAPI, Google Cloud Platform, Docker, Kubernetes, CI/CD</div>
+                </div>
+                <div class="expertise-row">
+                    <div class="expertise-category">📱 Frontend & Mobile</div>
+                    <div class="expertise-tech">JavaScript, TypeScript, React Native</div>
+                </div>
+                <div class="expertise-row">
+                    <div class="expertise-category">🔗 Blockchain</div>
+                    <div class="expertise-tech">Solidity, Rust</div>
+                </div>
+                <div class="expertise-row">
+                    <div class="expertise-category">🖥️ Windows App</div>
+                    <div class="expertise-tech">C#, .NET</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="section">
+        <div class="container">
+            <h2>Languages and Tools</h2>
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3>Backend</h3>
+                    <div class="skill-icons">
+                        <img height="40" src="https://skillicons.dev/icons?i=php,net,python,nodejs,fastapi,flask,express,nginx,vite"/>
                     </div>
                 </div>
-                
-                <div class="project-card">
-                    <h3>Project 2</h3>
-                    <p>Description of project 2 and its features.</p>
-                    <div class="project-links">
-                        <a href="#" class="btn"><i class="fas fa-link"></i> Live Demo</a>
-                        <a href="#" class="btn"><i class="fab fa-github"></i> Source Code</a>
+                <div class="skill-category">
+                    <h3>Frontend</h3>
+                    <div class="skill-icons">
+                        <img height="40" src="https://skillicons.dev/icons?i=vue,vuetify,react,mui,bootstrap,html,css,sass,js,ts,figma"/>
                     </div>
                 </div>
-                
-                <div class="project-card">
-                    <h3>Project 3</h3>
-                    <p>Description of project 3 and its features.</p>
-                    <div class="project-links">
-                        <a href="#" class="btn"><i class="fas fa-link"></i> Live Demo</a>
-                        <a href="#" class="btn"><i class="fab fa-github"></i> Source Code</a>
+                <div class="skill-category">
+                    <h3>Database</h3>
+                    <div class="skill-icons">
+                        <img height="40" src="https://skillicons.dev/icons?i=mysql,postgresql,mongodb,elasticsearch"/>
                     </div>
+                </div>
+                <div class="skill-category">
+                    <h3>DevOps</h3>
+                    <div class="skill-icons">
+                        <img height="40" src="https://skillicons.dev/icons?i=docker,kubernetes,gcp,terraform,jenkins,githubactions,gitlarun"/>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Automated test</h3>
+                    <div class="skill-icons">
+                        <img height="40" src="https://skillicons.dev/icons?i=selenium,jest,pytest,phpunit"/>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Version Control</h3>
+                    <div class="skill-icons">
+                        <img height="40" src="https://skillicons.dev/icons?i=git,github,gitlab,bitbucket"/>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>IDEs</h3>
+                    <div class="skill-icons">
+                        <img height="40" src="https://skillicons.dev/icons?i=vscode,phpstorm,eclipse,visualstudio,webstorm,sublime"/>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Other Tools</h3>
+                    <div class="skill-icons">
+                        <img height="40" src="https://skillicons.dev/icons?i=rabbitmq,grafana,bash"/>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Operating Systems</h3>
+                    <div class="skill-icons">
+                        <img height="40" src="https://skillicons.dev/icons?i=windows,ubuntu,debian,alpine"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="activity" class="section">
+        <div class="container">
+            <h2>Activity</h2>
+            <div class="activity-graphs">
+                <div class="graph">
+                    <img src="https://github-readme-activity-graph.vercel.app/graph?username=shiofreecss&bg_color=100f0f&color=4c5e9e&line=4c569e&point=403e41&area=true&hide_border=true" alt="GitHub Activity Graph">
+                </div>
+                <div class="stats-container">
+                    <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs?username=shiofreecss&show_icons=true&locale=en&layout=compact&theme=tokyonight" alt="Top Languages">
+                    <img height="180em" src="https://github-readme-stats.vercel.app/api?username=shiofreecss&show_icons=true&locale=en&layout=compact&theme=tokyonight" alt="GitHub Stats">
+                </div>
+                <div class="streak-stats">
+                    <img src="https://github-readme-streak-stats.herokuapp.com/?user=shiofreecss&&theme=tokyonight" alt="GitHub Streak Stats">
                 </div>
             </div>
         </div>
@@ -73,18 +155,19 @@
 
     <section id="contact" class="section">
         <div class="container">
-            <h2>Contact</h2>
-            <p>Feel free to reach out if you have any questions or want to collaborate.</p>
+            <h2>Connect with me</h2>
             <div class="social-links">
-                <a href="https://github.com/shiofreecss" class="social-icon"><i class="fab fa-github"></i></a>
-                <!-- Add more social links as needed -->
+                <a href="https://x.com/shiodevETH" target="blank" class="social-icon"><i class="devicon-twitter-original"></i></a>
+                <a href="https://www.linkedin.com/vn/shiodev/" target="blank" class="social-icon"><i class="devicon-linkedin-plain colored"></i></a>
+                <a href="https://github.com/shiofreecss" target="blank" class="social-icon"><i class="fab fa-github"></i></a>
             </div>
+            <p class="view-count"><img src="https://komarev.com/ghpvc/?username=shiofreecss&label=Profile%20views&color=0e75b6&style=flat" alt="Profile Views"></p>
         </div>
     </section>
 
     <footer>
         <div class="container">
-            <p>&copy; 2023 ShioFreeCSS. All rights reserved.</p>
+            <p>&copy; 2023 ShioDev. All rights reserved.</p>
         </div>
     </footer>
 

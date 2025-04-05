@@ -34,20 +34,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Add animation to project cards when they come into view
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('show');
-                observer.unobserve(entry.target);
+    // Handle image loading errors
+    document.querySelectorAll('img').forEach(img => {
+        img.addEventListener('error', function() {
+            // If GitHub stats images fail to load, show a message
+            if (this.src.includes('github-readme-stats') || 
+                this.src.includes('github-readme-activity-graph') ||
+                this.src.includes('github-readme-streak-stats')) {
+                const parent = this.parentElement;
+                if (parent) {
+                    const message = document.createElement('p');
+                    message.textContent = 'GitHub stats currently unavailable. Please check back later.';
+                    message.style.padding = '20px';
+                    message.style.color = '#666';
+                    parent.replaceChild(message, this);
+                }
             }
         });
-    }, {
-        threshold: 0.2
-    });
-
-    // Observe all project cards
-    document.querySelectorAll('.project-card').forEach(card => {
-        observer.observe(card);
     });
 }); 
