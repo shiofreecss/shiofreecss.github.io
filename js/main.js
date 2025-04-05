@@ -12,10 +12,13 @@ document.addEventListener('DOMContentLoaded', function() {
         playerContainer: document.querySelector('.player-container'),
         loopBtn: document.getElementById('loop-btn'),
         shuffleBtn: document.getElementById('shuffle-btn'),
+        fallbackPlayer: document.getElementById('fallback-player'),
+        fallbackAudioPlayer: document.getElementById('fallback-audio-player'),
         currentSongIndex: 0,
         isPlaying: false,
         isLooping: false,
         isShuffling: false,
+        useFallbackPlayer: false,
         originalSongs: [],
         songs: [
             {
@@ -28,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             {
                 title: 'Coverless Book Lofi',
-                url: 'music/coverless-book-lofi-.mp3'
+                url: 'music/coverless-book-lofi.mp3'
             },
             {
                 title: 'Lucky Chesming Lofi',
@@ -37,6 +40,10 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 title: 'Good Night Lofi Cozy Chill',
                 url: 'music/good-night-lofi-cozy-chill.mp3'
+            },
+            {
+                title: 'Lofi Background Music',
+                url: 'music/lofi-background-music.mp3'
             }
         ],
 
@@ -203,6 +210,55 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.playBtn.disabled = true;
                 this.songTitle.textContent = 'Loading...';
             });
+
+            // Add error event listener for audio loading
+            this.audioPlayer.addEventListener('error', (e) => {
+                console.error('Audio Error:', e);
+                const errorMessage = document.createElement('div');
+                errorMessage.style.color = 'red';
+                errorMessage.style.padding = '10px';
+                errorMessage.style.marginTop = '10px';
+                errorMessage.style.textAlign = 'center';
+                errorMessage.style.fontSize = '0.8rem';
+                
+                // Get error details
+                const error = e.target.error;
+                let errorText = 'Error loading audio';
+                
+                if (error) {
+                    switch (error.code) {
+                        case error.MEDIA_ERR_ABORTED:
+                            errorText = 'You aborted the audio playback';
+                            break;
+                        case error.MEDIA_ERR_NETWORK:
+                            errorText = 'Network error while loading audio';
+                            break;
+                        case error.MEDIA_ERR_DECODE:
+                            errorText = 'Audio decoding error';
+                            break;
+                        case error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+                            errorText = 'Audio format not supported';
+                            break;
+                        default:
+                            errorText = 'Unknown audio error';
+                            break;
+                    }
+                }
+                
+                errorMessage.textContent = errorText + ' - URL: ' + this.audioPlayer.src;
+                console.error(errorText, this.audioPlayer.src);
+                
+                // Show error details in player
+                this.songTitle.textContent = 'Error loading audio';
+                this.songTitle.style.color = 'red';
+                
+                // Try next song if not looping
+                if (!this.isLooping) {
+                    setTimeout(() => {
+                        this.nextBtn.click();
+                    }, 2000);
+                }
+            });
         },
         
         shuffleSongs: function() {
@@ -224,39 +280,86 @@ document.addEventListener('DOMContentLoaded', function() {
         },
 
         loadSong: function(index) {
-            const song = this.songs[index];
-            this.songTitle.textContent = song.title;
-            this.audioPlayer.src = song.url;
-            
-            // Maintain loop state
-            this.audioPlayer.loop = this.isLooping;
-            
-            // Add visual feedback when switching songs
-            this.songTitle.classList.add('loading');
-            setTimeout(() => {
-                this.songTitle.classList.remove('loading');
-            }, 800);
+            try {
+                const song = this.songs[index];
+                console.log('Loading song:', song);
+                
+                // Reset any previous error styles
+                this.songTitle.style.color = '';
+                
+                // Update title
+                this.songTitle.textContent = song.title;
+                
+                // Construct absolute URL to ensure correct path
+                const absoluteUrl = new URL(song.url, window.location.href).href;
+                console.log('Absolute URL:', absoluteUrl);
+                
+                // Set the source
+                this.audioPlayer.src = absoluteUrl;
+                
+                // Explicitly load the audio
+                this.audioPlayer.load();
+                
+                // Maintain loop state
+                this.audioPlayer.loop = this.isLooping;
+                
+                // Add visual feedback when switching songs
+                this.songTitle.classList.add('loading');
+                setTimeout(() => {
+                    this.songTitle.classList.remove('loading');
+                }, 800);
+            } catch (error) {
+                console.error('Error in loadSong:', error);
+            }
         },
 
         playSong: function() {
-            // Remove the fa-play class
-            this.playBtn.querySelector('i').classList.remove('fa-play');
-            // Add the fa-pause class
-            this.playBtn.querySelector('i').classList.add('fa-pause');
-            
-            this.audioPlayer.play()
-                .then(() => {
+            try {
+                // Remove the fa-play class
+                this.playBtn.querySelector('i').classList.remove('fa-play');
+                // Add the fa-pause class
+                this.playBtn.querySelector('i').classList.add('fa-pause');
+                
+                console.log('Attempting to play:', this.audioPlayer.src);
+                
+                // Check if audio is actually loaded
+                if (this.audioPlayer.readyState === 0) {
+                    console.log('Audio not loaded yet, reloading...');
+                    this.audioPlayer.load();
+                }
+                
+                // Play promise with proper error handling
+                const playPromise = this.audioPlayer.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            console.log('Playback started successfully');
+                            this.isPlaying = true;
+                            // Change toggle icon to show music is playing
+                            this.playerToggle.querySelector('i').classList.remove('fa-music');
+                            this.playerToggle.querySelector('i').classList.add('fa-volume-up');
+                        })
+                        .catch(error => {
+                            console.error('Error playing audio:', error);
+                            // Reset to play icon if there was an error
+                            this.playBtn.querySelector('i').classList.remove('fa-pause');
+                            this.playBtn.querySelector('i').classList.add('fa-play');
+                            
+                            // More specific error messages
+                            if (error.name === 'NotAllowedError') {
+                                alert('Playback was blocked. Please interact with the page first to enable audio.');
+                            } else if (error.name === 'NotSupportedError') {
+                                alert('This audio format is not supported by your browser.');
+                            }
+                        });
+                } else {
+                    console.log('Play promise is undefined, older browser?');
                     this.isPlaying = true;
-                    // Change toggle icon to show music is playing
-                    this.playerToggle.querySelector('i').classList.remove('fa-music');
-                    this.playerToggle.querySelector('i').classList.add('fa-volume-up');
-                })
-                .catch(error => {
-                    console.error('Error playing audio:', error);
-                    // Reset to play icon if there was an error
-                    this.playBtn.querySelector('i').classList.remove('fa-pause');
-                    this.playBtn.querySelector('i').classList.add('fa-play');
-                });
+                }
+            } catch (error) {
+                console.error('Unexpected error in playSong:', error);
+            }
         },
 
         pauseSong: function() {
