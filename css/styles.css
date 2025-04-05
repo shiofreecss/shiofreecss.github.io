@@ -339,6 +339,91 @@ blockquote {
     box-shadow: 0 5px 15px rgba(0, 240, 255, 0.5);
 }
 
+/* Projects Styles */
+.projects-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.project-card {
+    background-color: rgba(26, 26, 58, 0.7);
+    border: 2px solid var(--accent-color);
+    border-radius: 0;
+    padding: 25px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 240, 255, 0.3);
+    border-color: var(--primary-color);
+}
+
+.project-title {
+    color: var(--primary-color);
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    text-shadow: 0 0 5px rgba(255, 0, 165, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.project-title i {
+    font-size: 1.1rem;
+}
+
+.project-description {
+    margin-bottom: 20px;
+    flex-grow: 1;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.tech-tag {
+    background-color: rgba(0, 240, 255, 0.1);
+    color: var(--accent-color);
+    padding: 5px 10px;
+    font-size: 0.7rem;
+    border: 1px solid var(--accent-color);
+}
+
+.project-links {
+    display: flex;
+    gap: 15px;
+    margin-top: auto;
+}
+
+.project-link {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: rgba(255, 0, 165, 0.2);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    font-size: 0.8rem;
+    transition: all 0.3s;
+}
+
+.project-link:hover {
+    background-color: var(--primary-color);
+    color: var(--dark-color);
+    box-shadow: 0 0 15px rgba(255, 0, 165, 0.5);
+}
+
 /* Activity Styles */
 .activity-graphs {
     display: flex;
@@ -726,6 +811,10 @@ footer {
     .player-container {
         width: 270px;
         padding: 15px;
+    }
+
+    .projects-container {
+        grid-template-columns: 1fr;
     }
 }
 
