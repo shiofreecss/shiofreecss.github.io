@@ -9,6 +9,7 @@ This repository contains the source code for my personal portfolio website hoste
 - JavaScript (ES6+)
 - Font Awesome and Devicon for icons
 - GitHub Stats API integration
+- Audio API for the lofi music player
 
 ## Features
 
@@ -17,6 +18,7 @@ This repository contains the source code for my personal portfolio website hoste
 - Comprehensive display of skills and expertise
 - GitHub activity tracking and statistics
 - Contact information and social links
+- Lofi music player with volume control and track selection
 
 ## How to View
 
@@ -45,6 +47,7 @@ To run this website locally:
 - **Skills**: Detailed breakdown of programming languages and tools
 - **Activity**: GitHub statistics and contribution graphs
 - **Contact**: Social media links and professional connections
+- **Music Player**: Background lofi music to enhance the browsing experience
 
 ## License
 

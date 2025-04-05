@@ -9,6 +9,31 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 </head>
 <body>
+    <div class="music-player">
+        <div class="music-player-toggle">
+            <i class="fas fa-music"></i>
+        </div>
+        <div class="player-container">
+            <div class="player-header">
+                <h3>Lofi Music</h3>
+                <div class="player-controls">
+                    <button class="player-btn" id="prev-btn"><i class="fas fa-step-backward"></i></button>
+                    <button class="player-btn" id="play-btn"><i class="fas fa-play"></i></button>
+                    <button class="player-btn" id="next-btn"><i class="fas fa-step-forward"></i></button>
+                </div>
+            </div>
+            <div class="song-info">
+                <p id="song-title">Loading...</p>
+            </div>
+            <div class="volume-control">
+                <i class="fas fa-volume-down"></i>
+                <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
+                <i class="fas fa-volume-up"></i>
+            </div>
+        </div>
+        <audio id="audio-player"></audio>
+    </div>
+
     <nav class="navbar">
         <div class="container">
             <div class="logo">ShioDev</div>
