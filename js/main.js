@@ -40,11 +40,27 @@ document.addEventListener('DOMContentLoaded', function() {
             this.setupEventListeners();
             this.audioPlayer.volume = this.volumeSlider.value;
             
-            // Check if user has a preference stored
+            // Check if user has preferences stored
             const playerOpen = localStorage.getItem('musicPlayerOpen') === 'true';
+            const savedVolume = localStorage.getItem('musicPlayerVolume');
+            const lastSongIndex = localStorage.getItem('musicPlayerLastSong');
+            
             if (playerOpen) {
                 this.playerContainer.classList.add('active');
             }
+            
+            if (savedVolume) {
+                this.volumeSlider.value = savedVolume;
+                this.audioPlayer.volume = savedVolume;
+            }
+            
+            if (lastSongIndex && !isNaN(parseInt(lastSongIndex)) && parseInt(lastSongIndex) < this.songs.length) {
+                this.currentSongIndex = parseInt(lastSongIndex);
+                this.loadSong(this.currentSongIndex);
+            }
+
+            // Add pulse animation to toggle button to indicate music is ready
+            this.playerToggle.classList.add('pulse');
         },
 
         setupEventListeners: function() {
@@ -52,6 +68,14 @@ document.addEventListener('DOMContentLoaded', function() {
             this.playerToggle.addEventListener('click', () => {
                 this.playerContainer.classList.toggle('active');
                 localStorage.setItem('musicPlayerOpen', this.playerContainer.classList.contains('active'));
+                
+                // Auto play when opening for the first time
+                if (this.playerContainer.classList.contains('active') && !this.isPlaying && !this.hasPlayedBefore) {
+                    setTimeout(() => {
+                        this.playSong();
+                        this.hasPlayedBefore = true;
+                    }, 300);
+                }
             });
 
             // Play/Pause
@@ -70,6 +94,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     this.currentSongIndex = this.songs.length - 1;
                 }
                 this.loadSong(this.currentSongIndex);
+                localStorage.setItem('musicPlayerLastSong', this.currentSongIndex);
+                
                 if (this.isPlaying) {
                     this.playSong();
                 }
@@ -82,6 +108,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     this.currentSongIndex = 0;
                 }
                 this.loadSong(this.currentSongIndex);
+                localStorage.setItem('musicPlayerLastSong', this.currentSongIndex);
+                
                 if (this.isPlaying) {
                     this.playSong();
                 }
@@ -90,6 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Volume control
             this.volumeSlider.addEventListener('input', () => {
                 this.audioPlayer.volume = this.volumeSlider.value;
+                localStorage.setItem('musicPlayerVolume', this.volumeSlider.value);
             });
 
             // Auto-play next song when current one ends
@@ -99,7 +128,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     this.currentSongIndex = 0;
                 }
                 this.loadSong(this.currentSongIndex);
+                localStorage.setItem('musicPlayerLastSong', this.currentSongIndex);
                 this.playSong();
+            });
+
+            // Update button state when audio is loaded
+            this.audioPlayer.addEventListener('canplay', () => {
+                this.playBtn.disabled = false;
+            });
+            
+            // Show loading state
+            this.audioPlayer.addEventListener('waiting', () => {
+                this.playBtn.disabled = true;
+                this.songTitle.textContent = 'Loading...';
             });
         },
 
@@ -107,20 +148,47 @@ document.addEventListener('DOMContentLoaded', function() {
             const song = this.songs[index];
             this.songTitle.textContent = song.title;
             this.audioPlayer.src = song.url;
+            
+            // Add visual feedback when switching songs
+            this.songTitle.classList.add('loading');
+            setTimeout(() => {
+                this.songTitle.classList.remove('loading');
+            }, 800);
         },
 
         playSong: function() {
+            // Remove the fa-play class
             this.playBtn.querySelector('i').classList.remove('fa-play');
+            // Add the fa-pause class
             this.playBtn.querySelector('i').classList.add('fa-pause');
-            this.audioPlayer.play();
-            this.isPlaying = true;
+            
+            this.audioPlayer.play()
+                .then(() => {
+                    this.isPlaying = true;
+                    // Change toggle icon to show music is playing
+                    this.playerToggle.querySelector('i').classList.remove('fa-music');
+                    this.playerToggle.querySelector('i').classList.add('fa-volume-up');
+                })
+                .catch(error => {
+                    console.error('Error playing audio:', error);
+                    // Reset to play icon if there was an error
+                    this.playBtn.querySelector('i').classList.remove('fa-pause');
+                    this.playBtn.querySelector('i').classList.add('fa-play');
+                });
         },
 
         pauseSong: function() {
+            // Remove the fa-pause class
             this.playBtn.querySelector('i').classList.remove('fa-pause');
+            // Add the fa-play class
             this.playBtn.querySelector('i').classList.add('fa-play');
+            
             this.audioPlayer.pause();
             this.isPlaying = false;
+            
+            // Change toggle icon back to music
+            this.playerToggle.querySelector('i').classList.remove('fa-volume-up');
+            this.playerToggle.querySelector('i').classList.add('fa-music');
         }
     };
 
