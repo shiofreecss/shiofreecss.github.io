@@ -139,17 +139,39 @@ header {
 
 .pixel-art-title {
     position: relative;
-    z-index: 1;
+    z-index: 5;
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 header h1 {
     font-size: 2.5rem;
     margin-bottom: 20px;
     color: var(--accent-color);
-    text-shadow: 0 0 10px rgba(0, 240, 255, 0.7), 0 0 20px rgba(0, 240, 255, 0.4);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.9), 0 0 20px rgba(0, 240, 255, 0.6), 0 0 30px rgba(0, 240, 255, 0.4);
     position: relative;
     letter-spacing: 2px;
+    z-index: 2;
+    padding: 10px;
+    display: inline-block;
+    background-color: rgba(13, 15, 29, 0.7);
+    border: 2px solid var(--primary-color);
+    border-radius: 0;
+    animation: glow 3s infinite alternate;
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        text-shadow: 0 0 10px rgba(0, 240, 255, 0.9), 0 0 20px rgba(0, 240, 255, 0.6);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(255, 0, 165, 0.7);
+        text-shadow: 0 0 15px rgba(0, 240, 255, 0.9), 0 0 25px rgba(0, 240, 255, 0.6), 0 0 35px rgba(0, 240, 255, 0.4);
+    }
 }
 
 .pixel-buildings {
@@ -160,8 +182,9 @@ header h1 {
     height: 80px;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="80" viewBox="0 0 600 80"><rect x="10" y="30" width="30" height="50" fill="%231a1a3a"/><rect x="20" y="20" width="10" height="10" fill="%23ff00a5"/><rect x="50" y="40" width="40" height="40" fill="%231a1a3a"/><rect x="60" y="30" width="5" height="10" fill="%2300f0ff"/><rect x="75" y="25" width="5" height="15" fill="%23ff00a5"/><rect x="100" y="20" width="25" height="60" fill="%231a1a3a"/><rect x="105" y="25" width="5" height="5" fill="%2300f0ff"/><rect x="115" y="35" width="5" height="5" fill="%23ff00a5"/><rect x="105" y="45" width="5" height="5" fill="%2300f0ff"/><rect x="115" y="55" width="5" height="5" fill="%23ff00a5"/><rect x="135" y="50" width="15" height="30" fill="%231a1a3a"/><rect x="160" y="30" width="50" height="50" fill="%231a1a3a"/><rect x="170" y="40" width="5" height="5" fill="%2300f0ff"/><rect x="185" y="40" width="5" height="5" fill="%23ff00a5"/><rect x="200" y="40" width="5" height="5" fill="%2300f0ff"/><rect x="170" y="55" width="5" height="5" fill="%23ff00a5"/><rect x="185" y="55" width="5" height="5" fill="%2300f0ff"/><rect x="200" y="55" width="5" height="5" fill="%23ff00a5"/><rect x="220" y="10" width="20" height="70" fill="%231a1a3a"/><rect x="225" y="15" width="10" height="5" fill="%2300f0ff"/><rect x="225" y="25" width="10" height="5" fill="%23ff00a5"/><rect x="225" y="35" width="10" height="5" fill="%2300f0ff"/><rect x="225" y="45" width="10" height="5" fill="%23ff00a5"/><rect x="225" y="55" width="10" height="5" fill="%2300f0ff"/><rect x="250" y="45" width="30" height="35" fill="%231a1a3a"/><rect x="260" y="55" width="10" height="5" fill="%23ff00a5"/><rect x="290" y="25" width="45" height="55" fill="%231a1a3a"/><rect x="300" y="35" width="5" height="5" fill="%2300f0ff"/><rect x="315" y="35" width="5" height="5" fill="%23ff00a5"/><rect x="300" y="50" width="5" height="5" fill="%23ff00a5"/><rect x="315" y="50" width="5" height="5" fill="%2300f0ff"/><rect x="345" y="5" width="30" height="75" fill="%231a1a3a"/><rect x="355" y="15" width="10" height="10" fill="%2300f0ff"/><rect x="355" y="35" width="10" height="10" fill="%23ff00a5"/><rect x="355" y="55" width="10" height="10" fill="%2300f0ff"/><rect x="385" y="35" width="20" height="45" fill="%231a1a3a"/><rect x="415" y="20" width="50" height="60" fill="%231a1a3a"/><rect x="425" y="30" width="5" height="5" fill="%2300f0ff"/><rect x="440" y="30" width="5" height="5" fill="%23ff00a5"/><rect x="455" y="30" width="5" height="5" fill="%2300f0ff"/><rect x="425" y="45" width="5" height="5" fill="%23ff00a5"/><rect x="440" y="45" width="5" height="5" fill="%2300f0ff"/><rect x="455" y="45" width="5" height="5" fill="%23ff00a5"/><rect x="475" y="40" width="25" height="40" fill="%231a1a3a"/><rect x="485" y="50" width="5" height="5" fill="%2300f0ff"/><rect x="510" y="15" width="35" height="65" fill="%231a1a3a"/><rect x="520" y="25" width="5" height="5" fill="%23ff00a5"/><rect x="535" y="25" width="5" height="5" fill="%2300f0ff"/><rect x="520" y="40" width="5" height="5" fill="%2300f0ff"/><rect x="535" y="40" width="5" height="5" fill="%23ff00a5"/><rect x="520" y="55" width="5" height="5" fill="%23ff00a5"/><rect x="535" y="55" width="5" height="5" fill="%2300f0ff"/><rect x="555" y="45" width="20" height="35" fill="%231a1a3a"/><rect x="565" y="55" width="5" height="5" fill="%23ff00a5"/></svg>');
     background-repeat: repeat-x;
-    z-index: 0;
+    z-index: 1;
     opacity: 0.7;
+    pointer-events: none;
 }
 
 .intro-quote {
@@ -169,14 +192,19 @@ header h1 {
     margin: 0 auto;
     font-size: 1.1rem;
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
 blockquote {
     border-left: 4px solid var(--primary-color);
-    padding-left: 20px;
+    padding: 15px 20px;
     font-style: italic;
     text-align: left;
+    background-color: rgba(13, 15, 29, 0.7);
+    box-shadow: 0 0 15px rgba(255, 0, 165, 0.3);
+    border-top: 1px solid var(--primary-color);
+    border-bottom: 1px solid var(--primary-color);
+    border-right: 1px solid var(--primary-color);
 }
 
 /* Section Styles */
