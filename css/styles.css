@@ -418,9 +418,14 @@ blockquote {
     box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
 }
 
+#loop-btn.active, #shuffle-btn.active {
+    color: var(--primary-color);
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
 .song-info {
     text-align: center;
-    margin: 15px 0;
+    margin: 15px 0 5px;
     padding: 10px;
     background-color: #f9f9f9;
     border-radius: 8px;

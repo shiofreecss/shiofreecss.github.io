@@ -10,32 +10,40 @@ document.addEventListener('DOMContentLoaded', function() {
         songTitle: document.getElementById('song-title'),
         playerToggle: document.querySelector('.music-player-toggle'),
         playerContainer: document.querySelector('.player-container'),
+        loopBtn: document.getElementById('loop-btn'),
+        shuffleBtn: document.getElementById('shuffle-btn'),
         currentSongIndex: 0,
         isPlaying: false,
+        isLooping: false,
+        isShuffling: false,
+        originalSongs: [],
         songs: [
             {
-                title: 'Lofi Study',
-                url: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1b0292fc04.mp3?filename=lofi-study-112191.mp3'
+                title: 'Morning Lofi',
+                url: 'music/morning-lofi.mp3'
             },
             {
-                title: 'Morning Routine',
-                url: 'https://cdn.pixabay.com/download/audio/2022/10/25/audio_946f4e562e.mp3?filename=morning-routine-128222.mp3'
+                title: 'Lofi Background Working',
+                url: 'music/lofi-background-working.mp3'
             },
             {
-                title: 'Lo-Fi Chill',
-                url: 'https://cdn.pixabay.com/download/audio/2022/10/14/audio_4fb759a612.mp3?filename=lo-fi-chill-126348.mp3'
+                title: 'Coverless Book Lofi',
+                url: 'music/coverless-book-lofi-.mp3'
             },
             {
-                title: 'Sweet Lofi',
-                url: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_7c2a53bd4e.mp3?filename=sweet-lofi-120s-110307.mp3'
+                title: 'Lucky Chesming Lofi',
+                url: 'music/lucky-chesming-lofi-1.mp3'
             },
             {
-                title: 'Slow Lofi',
-                url: 'https://cdn.pixabay.com/download/audio/2022/08/03/audio_884fe92c21.mp3?filename=slow-lofi-118548.mp3'
+                title: 'Good Night Lofi Cozy Chill',
+                url: 'music/good-night-lofi-cozy-chill.mp3'
             }
         ],
 
         init: function() {
+            // Store original song order
+            this.originalSongs = [...this.songs];
+            
             this.loadSong(this.currentSongIndex);
             this.setupEventListeners();
             this.audioPlayer.volume = this.volumeSlider.value;
@@ -44,6 +52,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const playerOpen = localStorage.getItem('musicPlayerOpen') === 'true';
             const savedVolume = localStorage.getItem('musicPlayerVolume');
             const lastSongIndex = localStorage.getItem('musicPlayerLastSong');
+            const loopMode = localStorage.getItem('musicPlayerLoop') === 'true';
+            const shuffleMode = localStorage.getItem('musicPlayerShuffle') === 'true';
             
             if (playerOpen) {
                 this.playerContainer.classList.add('active');
@@ -57,6 +67,20 @@ document.addEventListener('DOMContentLoaded', function() {
             if (lastSongIndex && !isNaN(parseInt(lastSongIndex)) && parseInt(lastSongIndex) < this.songs.length) {
                 this.currentSongIndex = parseInt(lastSongIndex);
                 this.loadSong(this.currentSongIndex);
+            }
+
+            // Set loop state
+            if (loopMode) {
+                this.isLooping = true;
+                this.loopBtn.classList.add('active');
+                this.audioPlayer.loop = true;
+            }
+            
+            // Set shuffle state
+            if (shuffleMode) {
+                this.isShuffling = true;
+                this.shuffleBtn.classList.add('active');
+                this.shuffleSongs();
             }
 
             // Add pulse animation to toggle button to indicate music is ready
@@ -115,21 +139,58 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
+            // Loop toggle
+            this.loopBtn.addEventListener('click', () => {
+                this.isLooping = !this.isLooping;
+                this.audioPlayer.loop = this.isLooping;
+                this.loopBtn.classList.toggle('active');
+                localStorage.setItem('musicPlayerLoop', this.isLooping);
+                
+                // Visual feedback
+                if (this.isLooping) {
+                    this.loopBtn.style.color = 'var(--primary-color)';
+                } else {
+                    this.loopBtn.style.color = '';
+                }
+            });
+            
+            // Shuffle toggle
+            this.shuffleBtn.addEventListener('click', () => {
+                this.isShuffling = !this.isShuffling;
+                this.shuffleBtn.classList.toggle('active');
+                localStorage.setItem('musicPlayerShuffle', this.isShuffling);
+                
+                if (this.isShuffling) {
+                    this.shuffleBtn.style.color = 'var(--primary-color)';
+                    this.shuffleSongs();
+                } else {
+                    this.shuffleBtn.style.color = '';
+                    // Restore original order
+                    const currentSong = this.songs[this.currentSongIndex];
+                    this.songs = [...this.originalSongs];
+                    // Find current song in original order
+                    this.currentSongIndex = this.songs.findIndex(song => song.url === currentSong.url);
+                    if (this.currentSongIndex === -1) this.currentSongIndex = 0;
+                }
+            });
+
             // Volume control
             this.volumeSlider.addEventListener('input', () => {
                 this.audioPlayer.volume = this.volumeSlider.value;
                 localStorage.setItem('musicPlayerVolume', this.volumeSlider.value);
             });
 
-            // Auto-play next song when current one ends
+            // Auto-play next song when current one ends (if not looping a single track)
             this.audioPlayer.addEventListener('ended', () => {
-                this.currentSongIndex++;
-                if (this.currentSongIndex > this.songs.length - 1) {
-                    this.currentSongIndex = 0;
+                if (!this.isLooping) {
+                    this.currentSongIndex++;
+                    if (this.currentSongIndex > this.songs.length - 1) {
+                        this.currentSongIndex = 0;
+                    }
+                    this.loadSong(this.currentSongIndex);
+                    localStorage.setItem('musicPlayerLastSong', this.currentSongIndex);
+                    this.playSong();
                 }
-                this.loadSong(this.currentSongIndex);
-                localStorage.setItem('musicPlayerLastSong', this.currentSongIndex);
-                this.playSong();
             });
 
             // Update button state when audio is loaded
@@ -143,11 +204,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.songTitle.textContent = 'Loading...';
             });
         },
+        
+        shuffleSongs: function() {
+            // Save current song
+            const currentSong = this.songs[this.currentSongIndex];
+            
+            // Fisher-Yates shuffle algorithm
+            const shuffled = [...this.songs];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            
+            this.songs = shuffled;
+            
+            // Find current song in new order
+            this.currentSongIndex = this.songs.findIndex(song => song.url === currentSong.url);
+            if (this.currentSongIndex === -1) this.currentSongIndex = 0;
+        },
 
         loadSong: function(index) {
             const song = this.songs[index];
             this.songTitle.textContent = song.title;
             this.audioPlayer.src = song.url;
+            
+            // Maintain loop state
+            this.audioPlayer.loop = this.isLooping;
             
             // Add visual feedback when switching songs
             this.songTitle.classList.add('loading');
