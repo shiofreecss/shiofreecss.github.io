@@ -1,5 +1,110 @@
+// Add pixel stars to the background
+function createPixelStars() {
+    const body = document.querySelector('body');
+    const numberOfStars = 150;
+    
+    for (let i = 0; i < numberOfStars; i++) {
+        const star = document.createElement('div');
+        star.classList.add('pixel-star');
+        
+        // Random position
+        const x = Math.floor(Math.random() * window.innerWidth);
+        const y = Math.floor(Math.random() * window.innerHeight);
+        
+        // Random size (1-3px)
+        const size = Math.floor(Math.random() * 3) + 1;
+        
+        // Random opacity
+        const opacity = Math.random() * 0.7 + 0.3;
+        
+        // Random twinkle animation delay
+        const animationDelay = Math.random() * 5 + 's';
+        
+        // Apply styles
+        star.style.left = `${x}px`;
+        star.style.top = `${y}px`;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.opacity = opacity;
+        star.style.animation = `twinkle 5s infinite ${animationDelay}`;
+        
+        body.appendChild(star);
+    }
+}
+
+// Add twinkle animation to stylesheet
+function addTwinkleAnimation() {
+    const stylesheet = document.createElement('style');
+    stylesheet.textContent = `
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    `;
+    document.head.appendChild(stylesheet);
+}
+
+// Add pixel effect to section titles
+function pixelateHeadings() {
+    const sectionTitles = document.querySelectorAll('.section h2');
+    
+    sectionTitles.forEach(title => {
+        // Get the original text
+        const originalText = title.textContent;
+        
+        // Create a container for the pixelated text
+        const pixelContainer = document.createElement('div');
+        pixelContainer.classList.add('pixel-text-container');
+        
+        // Add textShadow to make it look more pixelated
+        title.style.textShadow = `
+            2px 0 0 rgba(85, 199, 255, 0.3),
+            -2px 0 0 rgba(85, 199, 255, 0.3),
+            0 2px 0 rgba(85, 199, 255, 0.3),
+            0 -2px 0 rgba(85, 199, 255, 0.3),
+            1px 1px 0 rgba(85, 199, 255, 0.3),
+            -1px -1px 0 rgba(85, 199, 255, 0.3),
+            1px -1px 0 rgba(85, 199, 255, 0.3),
+            -1px 1px 0 rgba(85, 199, 255, 0.3)
+        `;
+        
+        // Add pixel effect to the ::after element
+        const afterStyle = document.createElement('style');
+        afterStyle.textContent = `
+            .section h2::after {
+                box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+                transition: all 0.3s;
+            }
+            
+            .section h2:hover::after {
+                transform: translateY(2px);
+                box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+            }
+        `;
+        document.head.appendChild(afterStyle);
+    });
+}
+
+// Initialize pixel art
+function initPixelArt() {
+    addTwinkleAnimation();
+    createPixelStars();
+    pixelateHeadings();
+    
+    // Reposition stars on window resize
+    window.addEventListener('resize', () => {
+        // Remove existing stars
+        document.querySelectorAll('.pixel-star').forEach(star => star.remove());
+        // Create new stars
+        createPixelStars();
+    });
+}
+
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize pixel art theme
+    initPixelArt();
+    
     // Music Player
     const musicPlayer = {
         audioPlayer: document.getElementById('audio-player'),
@@ -53,7 +158,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
             this.loadSong(this.currentSongIndex);
             this.setupEventListeners();
-            this.audioPlayer.volume = this.volumeSlider.value;
+            
+            // Set initial volume
+            const initialVolume = this.volumeSlider.value;
+            this.audioPlayer.volume = initialVolume;
+            this.fallbackAudioPlayer.volume = initialVolume;
             
             // Check if user has preferences stored
             const playerOpen = localStorage.getItem('musicPlayerOpen') === 'true';
@@ -69,6 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (savedVolume) {
                 this.volumeSlider.value = savedVolume;
                 this.audioPlayer.volume = savedVolume;
+                this.fallbackAudioPlayer.volume = savedVolume;
             }
             
             if (lastSongIndex && !isNaN(parseInt(lastSongIndex)) && parseInt(lastSongIndex) < this.songs.length) {
@@ -149,7 +259,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // Loop toggle
             this.loopBtn.addEventListener('click', () => {
                 this.isLooping = !this.isLooping;
-                this.audioPlayer.loop = this.isLooping;
+                
+                // Set loop for appropriate player
+                if (this.useFallbackPlayer) {
+                    this.fallbackAudioPlayer.loop = this.isLooping;
+                } else {
+                    this.audioPlayer.loop = this.isLooping;
+                }
+                
                 this.loopBtn.classList.toggle('active');
                 localStorage.setItem('musicPlayerLoop', this.isLooping);
                 
@@ -183,8 +300,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Volume control
             this.volumeSlider.addEventListener('input', () => {
-                this.audioPlayer.volume = this.volumeSlider.value;
-                localStorage.setItem('musicPlayerVolume', this.volumeSlider.value);
+                const volume = this.volumeSlider.value;
+                this.audioPlayer.volume = volume;
+                this.fallbackAudioPlayer.volume = volume;
+                localStorage.setItem('musicPlayerVolume', volume);
             });
 
             // Auto-play next song when current one ends (if not looping a single track)
@@ -214,12 +333,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add error event listener for audio loading
             this.audioPlayer.addEventListener('error', (e) => {
                 console.error('Audio Error:', e);
-                const errorMessage = document.createElement('div');
-                errorMessage.style.color = 'red';
-                errorMessage.style.padding = '10px';
-                errorMessage.style.marginTop = '10px';
-                errorMessage.style.textAlign = 'center';
-                errorMessage.style.fontSize = '0.8rem';
                 
                 // Get error details
                 const error = e.target.error;
@@ -245,18 +358,63 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
                 
-                errorMessage.textContent = errorText + ' - URL: ' + this.audioPlayer.src;
                 console.error(errorText, this.audioPlayer.src);
                 
                 // Show error details in player
                 this.songTitle.textContent = 'Error loading audio';
                 this.songTitle.style.color = 'red';
                 
-                // Try next song if not looping
+                // Switch to fallback player after multiple errors
+                if (!this.useFallbackPlayer) {
+                    // Try next song if not looping
+                    if (!this.isLooping) {
+                        setTimeout(() => {
+                            this.nextBtn.click();
+                        }, 2000);
+                    }
+                    
+                    // Track error count for this session
+                    if (!this.errorCount) this.errorCount = 0;
+                    this.errorCount++;
+                    
+                    // After 2 errors, switch to fallback player
+                    if (this.errorCount >= 2) {
+                        this.useFallbackPlayer = true;
+                        this.fallbackPlayer.style.display = 'block';
+                        
+                        // Set current song on fallback player
+                        const song = this.songs[this.currentSongIndex];
+                        this.fallbackAudioPlayer.src = new URL(song.url, window.location.href).href;
+                        this.fallbackAudioPlayer.load();
+                        
+                        // Add message
+                        this.songTitle.textContent = 'Using fallback player - ' + song.title;
+                        this.songTitle.style.color = '';
+                        
+                        // Try to play with fallback
+                        this.fallbackAudioPlayer.play()
+                            .catch(err => console.error('Fallback player error:', err));
+                    }
+                } else {
+                    // Already using fallback player, update it
+                    const song = this.songs[this.currentSongIndex];
+                    this.fallbackAudioPlayer.src = new URL(song.url, window.location.href).href;
+                    this.fallbackAudioPlayer.load();
+                    this.songTitle.textContent = 'Using fallback player - ' + song.title;
+                    this.songTitle.style.color = '';
+                }
+            });
+
+            // Add event listeners for fallback player
+            this.fallbackAudioPlayer.addEventListener('ended', () => {
                 if (!this.isLooping) {
-                    setTimeout(() => {
-                        this.nextBtn.click();
-                    }, 2000);
+                    this.currentSongIndex++;
+                    if (this.currentSongIndex > this.songs.length - 1) {
+                        this.currentSongIndex = 0;
+                    }
+                    this.loadSong(this.currentSongIndex);
+                    localStorage.setItem('musicPlayerLastSong', this.currentSongIndex);
+                    this.playSong();
                 }
             });
         },
@@ -287,21 +445,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Reset any previous error styles
                 this.songTitle.style.color = '';
                 
-                // Update title
-                this.songTitle.textContent = song.title;
-                
                 // Construct absolute URL to ensure correct path
                 const absoluteUrl = new URL(song.url, window.location.href).href;
                 console.log('Absolute URL:', absoluteUrl);
                 
-                // Set the source
-                this.audioPlayer.src = absoluteUrl;
-                
-                // Explicitly load the audio
-                this.audioPlayer.load();
-                
-                // Maintain loop state
-                this.audioPlayer.loop = this.isLooping;
+                if (this.useFallbackPlayer) {
+                    // Update fallback player
+                    this.fallbackAudioPlayer.src = absoluteUrl;
+                    this.fallbackAudioPlayer.load();
+                    this.songTitle.textContent = 'Using fallback player - ' + song.title;
+                } else {
+                    // Update title for main player
+                    this.songTitle.textContent = song.title;
+                    
+                    // Set the source
+                    this.audioPlayer.src = absoluteUrl;
+                    
+                    // Explicitly load the audio
+                    this.audioPlayer.load();
+                    
+                    // Maintain loop state
+                    this.audioPlayer.loop = this.isLooping;
+                }
                 
                 // Add visual feedback when switching songs
                 this.songTitle.classList.add('loading');
@@ -319,6 +484,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.playBtn.querySelector('i').classList.remove('fa-play');
                 // Add the fa-pause class
                 this.playBtn.querySelector('i').classList.add('fa-pause');
+                
+                // Use appropriate player
+                if (this.useFallbackPlayer) {
+                    console.log('Using fallback player to play:', this.fallbackAudioPlayer.src);
+                    this.fallbackAudioPlayer.play()
+                        .then(() => {
+                            this.isPlaying = true;
+                            // Change toggle icon to show music is playing
+                            this.playerToggle.querySelector('i').classList.remove('fa-music');
+                            this.playerToggle.querySelector('i').classList.add('fa-volume-up');
+                        })
+                        .catch(error => {
+                            console.error('Fallback player error:', error);
+                            this.playBtn.querySelector('i').classList.remove('fa-pause');
+                            this.playBtn.querySelector('i').classList.add('fa-play');
+                        });
+                    return;
+                }
                 
                 console.log('Attempting to play:', this.audioPlayer.src);
                 
@@ -368,7 +551,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add the fa-play class
             this.playBtn.querySelector('i').classList.add('fa-play');
             
-            this.audioPlayer.pause();
+            // Use appropriate player
+            if (this.useFallbackPlayer) {
+                this.fallbackAudioPlayer.pause();
+            } else {
+                this.audioPlayer.pause();
+            }
+            
             this.isPlaying = false;
             
             // Change toggle icon back to music
