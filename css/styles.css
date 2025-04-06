@@ -353,11 +353,12 @@ blockquote {
     border: 2px solid var(--accent-color);
     border-radius: 0;
     padding: 25px;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
     box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
     display: flex;
     flex-direction: column;
     height: 100%;
+    min-height: 300px;
 }
 
 .project-card:hover {
@@ -374,10 +375,13 @@ blockquote {
     display: flex;
     align-items: center;
     gap: 10px;
+    line-height: 1.3;
+    word-break: break-word;
 }
 
 .project-title i {
     font-size: 1.1rem;
+    flex-shrink: 0;
 }
 
 .project-description {
@@ -385,6 +389,9 @@ blockquote {
     flex-grow: 1;
     font-size: 0.9rem;
     line-height: 1.6;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
 }
 
 .project-tech {
@@ -400,12 +407,17 @@ blockquote {
     padding: 5px 10px;
     font-size: 0.7rem;
     border: 1px solid var(--accent-color);
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .project-links {
     display: flex;
     gap: 15px;
     margin-top: auto;
+    flex-wrap: wrap;
 }
 
 .project-link {
@@ -416,12 +428,27 @@ blockquote {
     color: var(--primary-color);
     font-size: 0.8rem;
     transition: all 0.3s;
+    text-align: center;
 }
 
 .project-link:hover {
     background-color: var(--primary-color);
     color: var(--dark-color);
     box-shadow: 0 0 15px rgba(255, 0, 165, 0.5);
+}
+
+/* Touch device specific - no hover effect */
+@media (hover: none) {
+    .project-card:hover {
+        transform: none;
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+        border-color: var(--accent-color);
+    }
+    
+    .project-link:active {
+        background-color: var(--primary-color);
+        color: var(--dark-color);
+    }
 }
 
 /* Activity Styles */
@@ -741,6 +768,13 @@ footer {
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+    .projects-container {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        padding: 0 10px;
+    }
+}
+
 @media (max-width: 768px) {
     header {
         padding: 80px 0 50px;
@@ -802,6 +836,23 @@ footer {
         flex-wrap: wrap;
     }
 
+    .projects-container {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .project-card {
+        padding: 20px;
+    }
+    
+    .project-title {
+        font-size: 1.2rem;
+    }
+    
+    .project-description {
+        font-size: 0.85rem;
+    }
+
     /* Music player mobile adjustments */
     .music-player {
         bottom: 20px;
@@ -811,10 +862,6 @@ footer {
     .player-container {
         width: 270px;
         padding: 15px;
-    }
-
-    .projects-container {
-        grid-template-columns: 1fr;
     }
 }
 
@@ -830,6 +877,36 @@ footer {
     .about-list li {
         font-size: 1rem;
         padding: 10px 15px;
+    }
+    
+    .project-card {
+        padding: 15px;
+    }
+    
+    .project-title {
+        font-size: 1.1rem;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+    
+    .project-description {
+        font-size: 0.8rem;
+        line-height: 1.5;
+        margin-bottom: 15px;
+    }
+    
+    .tech-tag {
+        padding: 4px 8px;
+        font-size: 0.65rem;
+    }
+    
+    .project-links {
+        gap: 10px;
+    }
+    
+    .project-link {
+        padding: 6px 12px;
+        font-size: 0.75rem;
     }
 
     /* Music player mobile adjustments */
@@ -865,5 +942,26 @@ footer {
     #play-btn {
         width: 40px;
         height: 40px;
+    }
+}
+
+/* Add support for very small screens */
+@media (max-width: 360px) {
+    .project-title {
+        font-size: 1rem;
+    }
+    
+    .project-description {
+        font-size: 0.75rem;
+    }
+    
+    .tech-tag {
+        padding: 3px 6px;
+        font-size: 0.6rem;
+    }
+    
+    .project-link {
+        width: 100%;
+        text-align: center;
     }
 } 

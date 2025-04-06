@@ -164,10 +164,124 @@ function initPixelArt() {
     });
 }
 
+// Mobile Navigation Toggle
+const menuToggle = document.querySelector('.menu-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        
+        // Change icon based on menu state
+        const icon = menuToggle.querySelector('i');
+        if (navLinks.classList.contains('active')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+    });
+}
+
+// Close mobile menu when clicking a link
+const mobileNavLinks = document.querySelectorAll('.nav-links a');
+mobileNavLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            navLinks.classList.remove('active');
+            
+            // Reset icon
+            const icon = menuToggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+    });
+});
+
+// Enhance project cards for touch devices
+function enhanceProjectCards() {
+    const projectCards = document.querySelectorAll('.project-card');
+    
+    projectCards.forEach(card => {
+        // Detect if device has touch capability
+        const isTouchDevice = ('ontouchstart' in window) || 
+                            (navigator.maxTouchPoints > 0) || 
+                            (navigator.msMaxTouchPoints > 0);
+        
+        if (isTouchDevice) {
+            // For touch devices, add a tap effect instead of hover
+            card.addEventListener('touchstart', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.boxShadow = '0 10px 20px rgba(0, 240, 255, 0.3)';
+                this.style.borderColor = 'var(--primary-color)';
+            });
+            
+            card.addEventListener('touchend', function() {
+                setTimeout(() => {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                    this.style.borderColor = '';
+                }, 300);
+            });
+        }
+    });
+}
+
+// Handle window resize events for responsive behavior
+function handleResponsiveLayout() {
+    const width = window.innerWidth;
+    
+    // Apply specific styles based on screen width
+    if (width <= 480) {
+        // Extra small screens
+        document.querySelectorAll('.project-title').forEach(title => {
+            title.style.fontSize = '1.1rem';
+        });
+        
+        document.querySelectorAll('.project-description').forEach(desc => {
+            desc.style.fontSize = '0.8rem';
+        });
+    } else if (width <= 768) {
+        // Small screens
+        document.querySelectorAll('.project-title').forEach(title => {
+            title.style.fontSize = '1.2rem';
+        });
+        
+        document.querySelectorAll('.project-description').forEach(desc => {
+            desc.style.fontSize = '0.85rem';
+        });
+    } else {
+        // Reset for larger screens
+        document.querySelectorAll('.project-title').forEach(title => {
+            title.style.fontSize = '';
+        });
+        
+        document.querySelectorAll('.project-description').forEach(desc => {
+            desc.style.fontSize = '';
+        });
+    }
+}
+
+// Initialize responsive features
+function initResponsiveFeatures() {
+    // Initial setup
+    handleResponsiveLayout();
+    enhanceProjectCards();
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        handleResponsiveLayout();
+    });
+}
+
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize pixel art theme
     initPixelArt();
+    
+    // Initialize responsive features
+    initResponsiveFeatures();
     
     // Music Player
     const musicPlayer = {
@@ -632,23 +746,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize music player
     musicPlayer.init();
-
-    // Mobile Navigation Toggle
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    
-    if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', function() {
-            navLinks.classList.toggle('active');
-        });
-        
-        // Close menu when clicking on a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', function() {
-                navLinks.classList.remove('active');
-            });
-        });
-    }
 
     // Add smooth scrolling to all links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
