@@ -24,6 +24,20 @@ This repository contains the source code for my personal portfolio website hoste
 
 The website is hosted on GitHub Pages and can be viewed at [https://shiofreecss.github.io](https://shiofreecss.github.io)
 
+## Projects
+
+### GoSei - Go (Baduk/Weiqi) Platform
+
+The GoSei platform consists of two main components:
+
+- **Gosei Play**: A real-time multiplayer Go game application
+  - Repository: [https://github.com/shiofreecss/Gosei-Play](https://github.com/shiofreecss/Gosei-Play)
+  - Live Demo: [https://play.gosei.xyz](https://play.gosei.xyz)
+
+- **Gosei Kifu**: A professional game record analyzer
+  - Repository: [https://github.com/shiofreecss/Gosei-Kifu](https://github.com/shiofreecss/Gosei-Kifu)
+  - Live Demo: [https://kifu.gosei.xyz](https://kifu.gosei.xyz)
+
 ## Local Development
 
 To run this website locally:
@@ -45,6 +59,7 @@ To run this website locally:
 - **About Me**: Professional background and personal interests
 - **Tech Stack & Expertise**: Overview of technical capabilities
 - **Skills**: Detailed breakdown of programming languages and tools
+- **Projects**: Showcase of personal and professional projects
 - **Activity**: GitHub statistics and contribution graphs
 - **Contact**: Social media links and professional connections
 - **Music Player**: Background lofi music to enhance the browsing experience
