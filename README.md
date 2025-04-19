@@ -38,6 +38,19 @@ The GoSei platform consists of two main components:
   - Repository: [https://github.com/shiofreecss/Gosei-Kifu](https://github.com/shiofreecss/Gosei-Kifu)
   - Live Demo: [https://kifu.gosei.xyz](https://kifu.gosei.xyz)
 
+### BuzzyChat Platform
+
+The BuzzyChat platform consists of two main applications:
+
+- **BuzzyChat**: A real-time messaging application with community features
+  - Repository: [https://github.com/shiofreecss/BuzzyChat](https://github.com/shiofreecss/BuzzyChat)
+  - Live Demo: [https://buzzy.chat](https://buzzy.chat)
+
+- **BuzzyChat Agent**: A 3D talking agent with AI-powered responses
+  - Repository: [https://github.com/shiofreecss/BuzzyChat-Agent](https://github.com/shiofreecss/BuzzyChat-Agent)
+  - Live Demo: [https://ai.buzzy.chat](https://ai.buzzy.chat)
+  - Features: 3D animated characters, speech recognition, text-to-speech, multilingual support
+
 ## Local Development
 
 To run this website locally:
